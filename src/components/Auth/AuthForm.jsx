@@ -3,6 +3,7 @@ import axios from "axios";
 import Input from "../UI/Input";
 import Home from "../../Pages/Home";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../store/auth-context";
 
 
 
@@ -16,6 +17,7 @@ const AuthForm = () => {
   const [isErrorVisible, setIsErrorVisible] = useState(false);
 
   const naviateTo = useNavigate();//Navigation
+  const {handleLogin}=useAuth();
 
   const API_KEY = `AIzaSyDmSv7uTvH1Dsz9pWQEa9-BztI1xV9F4H0`;
   const SIGNUP_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;

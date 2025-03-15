@@ -2,9 +2,9 @@ import { createBrowserRouter,RouterProvider } from "react-router-dom"
 
 import Home from "./Pages/Home"
 import SignInPage from "./Pages/SignInPage"
-
+import Profile from "./Pages/Profile"
 //import AuthForm from "./components/Auth/AuthForm"
-import Header from "./components/Layout/Header"
+//import Header from "./components/Layout/Header"
 import RootLayout from "./components/Layout/RootLayout"
 
 
@@ -14,8 +14,9 @@ const router=createBrowserRouter([
     element:<RootLayout/>,
     id:'root',
     children:[
+      {path:'/',element:<SignInPage/>},
       {path:'/home',element:<Home/>},
-      {path:'/',element:<SignInPage/>}
+      {path:'/profile',element:<Profile/>}
     ]
   }
 ])
