@@ -3,6 +3,7 @@ import axios from "axios";
 import Input from "../UI/Input";
 import Home from "../../Pages/Home";
 
+
 const AuthForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -133,6 +134,7 @@ const AuthForm = () => {
             <button type="submit">{isSignUp ? `Sign Up` : `Login`}</button>
           </div>
         </form>
+        
       </section>
       <div>
         <button type="button" onClick={toggleSignUpLoginHandler}>

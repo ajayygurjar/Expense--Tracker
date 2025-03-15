@@ -1,4 +1,4 @@
-
+import { NavLink } from "react-router-dom";
 
 const Header=()=>{
 
@@ -8,9 +8,10 @@ const Header=()=>{
             <h1 >MyWebLink</h1>
             <nav >
                 <ul >
-                    <li >Home</li>
-                    <li >Products</li>
-                    <li >About us</li>
+                    <li ><NavLink to='/home'>Home</NavLink></li>
+
+                    <li ><NavLink >Products</NavLink></li>
+                    <li ><NavLink >About us</NavLink></li>
                 </ul>
             </nav>
         </header>
