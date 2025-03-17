@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Input from "../UI/Input";
-import Home from "../../Pages/Home";
+//import Home from "../../Pages/Home";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../store/auth-context";
 
@@ -17,7 +17,7 @@ const AuthForm = () => {
   const [isErrorVisible, setIsErrorVisible] = useState(false);
 
   const naviateTo = useNavigate();//Navigation
-  const {handleLogin}=useAuth();
+  const {handleLogIn}=useAuth();
 
   const API_KEY = `AIzaSyDmSv7uTvH1Dsz9pWQEa9-BztI1xV9F4H0`;
   const SIGNUP_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
@@ -47,7 +47,9 @@ const AuthForm = () => {
     if (!isSignUp) {
       try {
         const response = await axios.post(SIGNIN_URL, userAuthData);
-        console.log(response.data);
+        //console.log(response.data);
+        handleLogIn(response.data.idToken, email);
+        //console.log(response.data.idToken)
         setEmail("");
         setPassword("");
         naviateTo('/home',{replace:true});//navigate to home page
