@@ -5,8 +5,6 @@ import Input from "../UI/Input";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../store/auth-context";
 
-
-
 const AuthForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,12 +14,9 @@ const AuthForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isErrorVisible, setIsErrorVisible] = useState(false);
 
-  
+  const navigateTo = useNavigate(); //Navigation
 
-
-  const navigateTo = useNavigate();//Navigation
-
-  const {handleLogIn}=useAuth();
+  const { handleLogIn } = useAuth();
 
   const API_KEY = `AIzaSyDmSv7uTvH1Dsz9pWQEa9-BztI1xV9F4H0`;
   const SIGNUP_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
@@ -53,12 +48,10 @@ const AuthForm = () => {
         const response = await axios.post(SIGNIN_URL, userAuthData);
         //console.log(response.data);
         handleLogIn(response.data.idToken, email);
-       // console.log(response.data.idToken,email)
+        // console.log(response.data.idToken,email)
         setEmail("");
         setPassword("");
-        navigateTo('/home',{replace:true});//navigate to home page
-
-
+        navigateTo("/home", { replace: true }); //navigate to home page
       } catch (error) {
         if (error.response && error.response.data.error.message) {
           const errorMsg = error.response.data.error.message;
@@ -148,12 +141,16 @@ const AuthForm = () => {
               </div>
             )}
           </div>
+          <div>
+            <button onClick={() => navigateTo("/forgot-password")}>
+              Forgot Password?
+            </button>
+          </div>
           {isErrorVisible && <p style={{ color: "red" }}>{errorMessage}</p>}
           <div>
             <button type="submit">{isSignUp ? `Sign Up` : `Login`}</button>
           </div>
         </form>
-        
       </section>
       <div>
         <button type="button" onClick={toggleSignUpLoginHandler}>
