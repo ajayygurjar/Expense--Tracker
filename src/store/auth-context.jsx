@@ -15,7 +15,7 @@ import React,{useContext, useState} from 'react';
         localStorage.setItem('token',token)
         setEmail(email)
         localStorage.setItem('email',email)
-        console.log(token)
+        
     }
 
     const handleLogOut=()=>{

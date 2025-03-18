@@ -1,4 +1,4 @@
-import { NavLink,useNavigate } from "react-router-dom";
+import { Link, NavLink,useNavigate } from "react-router-dom";
 import useAuth from "../../store/auth-context";
 const Header=()=>{
 
@@ -14,6 +14,7 @@ const Header=()=>{
 
     return (
         <header >
+            <section>
             <h1 >MyWebLink</h1>
             <nav >
                 <ul >
@@ -24,6 +25,15 @@ const Header=()=>{
                 </ul>
                 {isLoggedIn && <button onClick={logOut} >Logout</button>}
             </nav>
+            </section>
+            {isLoggedIn&&<section>
+                <nav>
+                    <ul>
+                        <Link to='/user-expense'>
+                        <li>Daily Expense</li></Link>
+                    </ul>
+                </nav>
+            </section>}
         </header>
     );
 
