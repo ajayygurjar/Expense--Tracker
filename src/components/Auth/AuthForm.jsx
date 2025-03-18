@@ -16,7 +16,11 @@ const AuthForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isErrorVisible, setIsErrorVisible] = useState(false);
 
+  
+
+
   const naviateTo = useNavigate();//Navigation
+
   const {handleLogIn}=useAuth();
 
   const API_KEY = `AIzaSyDmSv7uTvH1Dsz9pWQEa9-BztI1xV9F4H0`;

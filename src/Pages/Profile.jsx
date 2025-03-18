@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useAuth from "../store/auth-context";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const API_KEY = `AIzaSyDmSv7uTvH1Dsz9pWQEa9-BztI1xV9F4H0`;
 const UPDATE_PROFILE_URL = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${API_KEY}`;
@@ -92,6 +93,13 @@ const Profile = () => {
 
           <div>
             <button type="submit">Update</button>
+          </div>
+          <div>
+          <Link to="/home">
+              <button type="button" >
+                Cancel
+              </button>
+              </Link>
           </div>
         </form>
       </div>
