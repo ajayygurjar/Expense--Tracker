@@ -49,7 +49,7 @@ const AuthForm = () => {
         const response = await axios.post(SIGNIN_URL, userAuthData);
         //console.log(response.data);
         handleLogIn(response.data.idToken, email);
-        //console.log(response.data.idToken)
+       // console.log(response.data.idToken,email)
         setEmail("");
         setPassword("");
         naviateTo('/home',{replace:true});//navigate to home page
