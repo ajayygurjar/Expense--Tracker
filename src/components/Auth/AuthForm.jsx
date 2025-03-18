@@ -19,7 +19,7 @@ const AuthForm = () => {
   
 
 
-  const naviateTo = useNavigate();//Navigation
+  const navigateTo = useNavigate();//Navigation
 
   const {handleLogIn}=useAuth();
 
@@ -56,7 +56,7 @@ const AuthForm = () => {
        // console.log(response.data.idToken,email)
         setEmail("");
         setPassword("");
-        naviateTo('/home',{replace:true});//navigate to home page
+        navigateTo('/home',{replace:true});//navigate to home page
 
 
       } catch (error) {

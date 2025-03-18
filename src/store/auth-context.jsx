@@ -4,6 +4,7 @@ import React,{useContext, useState} from 'react';
  const AuthContext = React.createContext();
  
  export const AuthProvider = ({ children }) => {
+    
     const [email,setEmail]=useState('')
 
     const [token,setToken]=useState(localStorage.getItem('token')||null);
@@ -14,14 +15,21 @@ import React,{useContext, useState} from 'react';
         localStorage.setItem('token',token)
         setEmail(email)
         localStorage.setItem('email',email)
-        
+        console.log(token)
     }
 
-
+    const handleLogOut=()=>{
+        setToken('')
+        setEmail('')
+        
+        localStorage.setItem('token','')
+        localStorage.setItem('email','')
+    }
+    
 
 
  	const context = {
-        token,isLoggedIn,handleLogIn,email
+        token,isLoggedIn,handleLogIn,email,handleLogOut
     };
 
     

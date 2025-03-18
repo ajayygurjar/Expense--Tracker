@@ -1,6 +1,15 @@
-import { NavLink } from "react-router-dom";
-
+import { NavLink,useNavigate } from "react-router-dom";
+import useAuth from "../../store/auth-context";
 const Header=()=>{
+
+    const navigateTo=useNavigate()
+    const {isLoggedIn,handleLogOut}=useAuth()
+
+    const logOut=()=>{
+        handleLogOut();
+        navigateTo('/',{replace:true});
+    }
+
 
 
     return (
@@ -13,6 +22,7 @@ const Header=()=>{
                     <li ><NavLink >Products</NavLink></li>
                     <li ><NavLink >About us</NavLink></li>
                 </ul>
+                {isLoggedIn && <button onClick={logOut} >Logout</button>}
             </nav>
         </header>
     );
