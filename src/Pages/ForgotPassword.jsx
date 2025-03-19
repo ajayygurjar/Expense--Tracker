@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 
-const API_KEY = "AIzaSyDmSv7uTvH1Dsz9pWQEa9-BztI1xV9F4H0";
+const API_KEY = `AIzaSyAWVnD8ZpwnamACMsH-P3a-kmn1_BVi8q8`;
 const PASSWORD_RESET_LINK = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`;
 
 const ForgotPassword = () => {

@@ -3,7 +3,7 @@ import useAuth from "../store/auth-context";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const API_KEY = `AIzaSyDmSv7uTvH1Dsz9pWQEa9-BztI1xV9F4H0`;
+const API_KEY = `AIzaSyAWVnD8ZpwnamACMsH-P3a-kmn1_BVi8q8`;
 const UPDATE_PROFILE_URL = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${API_KEY}`;
 const GET_PROFILE = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`;
 

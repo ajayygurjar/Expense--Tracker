@@ -4,7 +4,7 @@ import useAuth from "../store/auth-context";
 //import axios from "axios";
 
 const Home = () => {
-  const API_KEY = `AIzaSyDmSv7uTvH1Dsz9pWQEa9-BztI1xV9F4H0`;
+  const API_KEY = `AIzaSyAWVnD8ZpwnamACMsH-P3a-kmn1_BVi8q8`;
   const EMAIL_VERIFICATON_URL = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`;
 
   const { token } = useAuth();
