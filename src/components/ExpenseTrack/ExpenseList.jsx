@@ -1,7 +1,19 @@
 import useExpense from "../../store/expense-context";
 
 const ExpenseList = () => {
-    const { expenseList } = useExpense();
+    const { expenseList, expenseDeleteHandler, handleEditExpense } =
+ 		useExpense();
+ 
+ 	
+ 
+ 	const handleDelete = (id) => {
+ 		expenseDeleteHandler(id);
+ 	};
+ 
+ 	const handleEdit = (item) => {
+ 		
+ 		handleEditExpense(item);
+ 	};
 
     return (
         <>
@@ -11,6 +23,8 @@ const ExpenseList = () => {
                         <span>${expense.amount} </span>
                         <span>{expense.description} </span>
                         <span>{expense.category} </span>
+                        <button onClick={()=>handleDelete(expense.id)}>Delete</button>
+                        <button onClick={()=>handleEdit(expense)}>Edit</button>
                          
                     </li>
                 ))}
