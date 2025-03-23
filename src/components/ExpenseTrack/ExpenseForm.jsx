@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import {  useEffect } from "react";
+import { Container, Form, Button ,Row,Col} from "react-bootstrap";
 import useExpense from "../../store/expense-context";
 
 const options = [
@@ -55,46 +56,60 @@ const ExpenseForm = () => {
     }
   }, [editExpense]);
 
-  return (
-    <form onSubmit={handleExpense}>
-      <div>
-        <label htmlFor="expense">Expense Amount</label>
-        <input
-          id="expense"
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="expense-description">Description of Expense</label>
-        <input
-          id="expense-description"
-          type="text"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <select value={category} id="category" onChange={(e) => setCategory(e.target.value)}>
-          <option value="" disabled>
-            Select an option
-          </option>
-          {options.map((option, index) => {
-            return (
-              <option key={index} value={option}>
-                {option}
+  return (  <Container className="mt-4">
+    <Row className="justify-content-center">
+      <Col md={6} lg={4}>
+        <Form onSubmit={handleExpense}>
+          <Form.Group className="mb-3" controlId="formExpenseAmount">
+            <Form.Label>Expense Amount</Form.Label>
+            <Form.Control
+              id="expense"
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+              placeholder="Enter expense amount"
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formExpenseDescription">
+            <Form.Label>Description of Expense</Form.Label>
+            <Form.Control
+              id="expense-description"
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              placeholder="Enter description"
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formExpenseCategory">
+            <Form.Label>Category</Form.Label>
+            <Form.Control
+              as="select"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+            >
+              <option value="" disabled>
+                Select an option
               </option>
-            );
-          })}
-        </select>
-      </div>
-      <div>
-        <button type="submit">{editExpense ? "Update" : "Add"} Expense</button>
-      </div>
-    </form>
+              {options.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+
+          <Button variant="primary" type="submit">
+            {editExpense ? "Update" : "Add"} Expense
+          </Button>
+        </Form>
+      </Col>
+    </Row>
+  </Container>
   );
 };
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../store/auth-context";
+import { Container, Row, Col, Button } from "react-bootstrap";
 //import axios from "axios";
 
 const Home = () => {
@@ -50,23 +51,27 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <h1>Welcome to Expense Tracker!!!</h1>
-      <hr />
-      <span>
-        Your profile is incomplete.
-        <Link to={"/profile"} href="#">
-          Complete now
-        </Link>
-        <button
+    <Container className="mt-5">
+    <Row className="justify-content-center">
+      <Col md={6} lg={4} className="text-center">
+        <h1>Welcome to Expense Tracker!!!</h1>
+        <hr />
+        <p>
+          Your profile is incomplete.{" "}
+          <Link to="/profile" className="text-decoration-none">
+            Complete now
+          </Link>
+        </p>
+        <Button
+          variant="primary"
           onClick={verifyEmail}
           style={{ marginLeft: "2rem" }}
-          type="submit"
         >
           Verify Email
-        </button>
-      </span>
-    </div>
+        </Button>
+      </Col>
+    </Row>
+  </Container>
   );
 };
 

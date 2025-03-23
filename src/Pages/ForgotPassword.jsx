@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
+import { Form, Button, Container } from 'react-bootstrap';
 
 const API_KEY = `AIzaSyAWVnD8ZpwnamACMsH-P3a-kmn1_BVi8q8`;
 const PASSWORD_RESET_LINK = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`;
@@ -24,25 +25,32 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div>
-      <h1>Forgot Password</h1>
+  <Container className="mt-5">
+    <h1 className="text-center">Forgot Password</h1>
+    <Form onSubmit={handlePasswordRest} className="mx-auto" style={{ maxWidth: '400px' }}>
 
-      <form onSubmit={handlePasswordRest}>
-        <label htmlFor="email">Email:</label>
-        <input
-          id="email"
-          name="email"
+      <Form.Group className="mb-3" controlId="email">
+        <Form.Label>Email</Form.Label>
+        <Form.Control
           type="email"
+          placeholder="Enter your email"
           ref={forgorUsersMail}
           required
-        ></input>
+        />
+      </Form.Group>
 
-        <button type="submit">Send Link</button>
-        <Link to={"/"}>Already a user?Login</Link>
-      </form>
-      <div></div>
-    </div>
-  );
+
+      <Button variant="primary" type="submit" block>
+        Send Link
+      </Button>
+
+
+      <div className="mt-3 text-center">
+        <Link to="/">Already a user? Login</Link>
+      </div>
+    </Form>
+  </Container>
+    );
 };
 
 export default ForgotPassword;

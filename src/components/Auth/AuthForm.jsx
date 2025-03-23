@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Input from "../UI/Input";
-//import Home from "../../Pages/Home";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../store/auth-context";
+import { Container, Form, Button, Row, Col } from "react-bootstrap";
 
 const AuthForm = () => {
   const [email, setEmail] = useState("");
@@ -14,11 +13,11 @@ const AuthForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isErrorVisible, setIsErrorVisible] = useState(false);
 
-  const navigateTo = useNavigate(); //Navigation
+  const navigate = useNavigate(); // Navigation hook
 
   const { handleLogIn } = useAuth();
 
-  const API_KEY = `AIzaSyAWVnD8ZpwnamACMsH-P3a-kmn1_BVi8q8`;
+  const API_KEY = "AIzaSyAWVnD8ZpwnamACMsH-P3a-kmn1_BVi8q8";
   const SIGNUP_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
   const SIGNIN_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`;
 
@@ -31,62 +30,51 @@ const AuthForm = () => {
   const authFormHandler = async (event) => {
     event.preventDefault();
     const userAuthData = {
-      email: email,
-      password: password,
+      email,
+      password,
       returnSecureToken: true,
     };
 
-    if (isSignUp) {
-      if (password !== confirmPassword) {
-        showErrorMessage(`Password don't match`);
-        return;
-      }
+    // Signup validation (password match)
+    if (isSignUp && password !== confirmPassword) {
+      showErrorMessage("Passwords don't match!");
+      return;
     }
 
-    if (!isSignUp) {
-      try {
+    try {
+      // SignIn flow
+      if (!isSignUp) {
         const response = await axios.post(SIGNIN_URL, userAuthData);
-        //console.log(response.data);
-        handleLogIn(response.data.idToken, email);
-        // console.log(response.data.idToken,email)
-        setEmail("");
+        handleLogIn(response.data.idToken, email); 
+        setEmail(""); 
         setPassword("");
-        navigateTo("/home", { replace: true }); //navigate to home page
-      } catch (error) {
-        if (error.response && error.response.data.error.message) {
-          const errorMsg = error.response.data.error.message;
-          if (errorMsg === "EMAIL_NOT_FOUND") {
-            showErrorMessage("*Email not found");
-          } else if (errorMsg === "INVALID_LOGIN_CREDENTIALS") {
-            showErrorMessage("*Invalid password");
-          } else {
-            showErrorMessage("An unexpected error occurred");
-          }
-        }
+        navigate("/home", { replace: true }); // Navigate to home
+      } else {
+        // SignUp flow
+        const response = await axios.post(SIGNUP_URL, userAuthData);
+        console.log(response.data);
+        setEmail(""); 
+        setPassword("");
+        setConfirmPassword(""); 
+      
       }
-    } else {
-      try {
-        if (password === confirmPassword) {
-          const response = await axios.post(SIGNUP_URL, userAuthData);
-          setEmail("");
-          setPassword("");
-
-          console.log(response.data);
-        } else {
-          setErrorMessage("* Password doesnt Match");
-          setIsErrorVisible(true);
-          setTimeout(() => setIsErrorVisible(false), 3000);
-        }
-      } catch (error) {
-        if (error.response.data.error.message === "INVALID_EMAIL") {
-          setErrorMessage("* Enter a Valid Email");
-        } else if (error.response.data.error.message === "EMAIL_EXISTS") {
-          setErrorMessage("* Email is Already Registered");
+    } catch (error) {
+      if (error.response && error.response.data.error.message) {
+        const errorMsg = error.response.data.error.message;
+        if (errorMsg === "EMAIL_NOT_FOUND") {
+          showErrorMessage("Email not found");
+        } else if (errorMsg === "INVALID_LOGIN_CREDENTIALS") {
+          showErrorMessage("Invalid password");
+        } else if (errorMsg === "EMAIL_EXISTS") {
+          showErrorMessage("Email already registered");
         } else if (
-          error.response.data.error.message ===
-          "WEAK_PASSWORD : Password should be at least 6 characters"
+          errorMsg === "WEAK_PASSWORD : Password should be at least 6 characters"
         ) {
-          setErrorMessage("* Password should be at least 6 characters");
+          showErrorMessage("Password should be at least 6 characters");
+        } else if (errorMsg === "INVALID_EMAIL") {
+          showErrorMessage("Invalid email format");
+        } else {
+          showErrorMessage("An unexpected error occurred");
         }
       }
     }
@@ -97,68 +85,81 @@ const AuthForm = () => {
     setEmail("");
     setPassword("");
     setConfirmPassword("");
-    setErrorMessage("");
+    setErrorMessage(""); // Reset error messages on toggle
   };
 
   return (
     <main>
-      <section>
-        <h1>{isSignUp ? `Sign Up` : `Login`}</h1>
-        <form onSubmit={authFormHandler}>
-          <div>
-            <div>
-              <Input
-                label="Email"
-                id="email"
-                name="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                autoFocus={true}
-              />
-            </div>
+      <Container>
+        <section>
+          <h1 className="text-center text-primary">
+            {isSignUp ? "Sign Up" : "Login"}
+          </h1>
+          <Row className="justify-content-center">
+            <Col md={6} lg={4} className="border border-2 p-4 rounded">
+              <Form onSubmit={authFormHandler}>
+                {/* Email */}
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoFocus={true}
+                  />
+                </Form.Group>
 
-            <div>
-              <Input
-                label="Password"
-                id="password"
-                name="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            {isSignUp && (
-              <div>
-                <Input
-                  label="Confirm Password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
+                {/* Password */}
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Form.Group>
+
+                {/* Confirm Password (only for signup) */}
+                {isSignUp && (
+                  <Form.Group className="mb-3" controlId="formConfirmPassword">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder="Confirm Password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                  </Form.Group>
+                )}
+
+                {/* Error Message */}
+                {isErrorVisible && <p style={{ color: "red" }}>{errorMessage}</p>}
+
+                {/* Submit Button */}
+                <Button variant="primary" type="submit">
+                  {isSignUp ? "Sign Up" : "Login"}
+                </Button>
+              </Form>
+
+              {/* Forgot Password Link */}
+              <div className="mt-3">
+                <Button variant="link" onClick={() => navigate("/forgot-password")}>
+                  Forgot Password?
+                </Button>
               </div>
-            )}
-          </div>
-          <div>
-            <button onClick={() => navigateTo("/forgot-password")}>
-              Forgot Password?
-            </button>
-          </div>
-          {isErrorVisible && <p style={{ color: "red" }}>{errorMessage}</p>}
-          <div>
-            <button type="submit">{isSignUp ? `Sign Up` : `Login`}</button>
-          </div>
-        </form>
-      </section>
-      <div>
-        <button type="button" onClick={toggleSignUpLoginHandler}>
-          {isSignUp
-            ? `Have an account  ? Login`
-            : `Don't Have an account ? Sign Up`}
-        </button>
-      </div>
+
+              
+              <div className="mt-3">
+                <Button variant="link" onClick={toggleSignUpLoginHandler}>
+                  {isSignUp ? "Have an account? Login" : "Don't have an account? Sign Up"}
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        </section>
+      </Container>
     </main>
   );
 };

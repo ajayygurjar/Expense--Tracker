@@ -1,5 +1,6 @@
-import { Link, NavLink,useNavigate } from "react-router-dom";
+import { Link, NavLink,useNavigate, } from "react-router-dom";
 import useAuth from "../../store/auth-context";
+import { Container,Nav,Navbar,Button } from "react-bootstrap";
 const Header=()=>{
 
     const navigateTo=useNavigate()
@@ -14,26 +15,29 @@ const Header=()=>{
 
     return (
         <header >
-            <section>
-            <h1 >MyWebLink</h1>
-            <nav >
-                <ul >
-                    <li ><NavLink to='/home'>Home</NavLink></li>
+            <Navbar bg="dark" variant="dark" expand='lg'>
+                <Container className="justify-content-start">
+                    <Navbar.Brand href='/'>MyWebLink</Navbar.Brand>
 
-                    <li ><NavLink >Products</NavLink></li>
-                    <li ><NavLink >About us</NavLink></li>
-                </ul>
-                {isLoggedIn && <button onClick={logOut} >Logout</button>}
-            </nav>
-            </section>
-            {isLoggedIn&&<section>
-                <nav>
-                    <ul>
-                        <Link to='/user-expense'>
-                        <li>Daily Expense</li></Link>
-                    </ul>
-                </nav>
-            </section>}
+                        <Nav className="justify-content-center">
+                            <Nav.Link as={NavLink} to='/home'>Home</Nav.Link>
+                            <Nav.Link as={NavLink} to='/home'>Products</Nav.Link>
+                            <Nav.Link as={NavLink} to='/home'>About Us</Nav.Link>
+                        </Nav>
+                        {isLoggedIn&& (<Button onClick={logOut} variant="outline-light">Logout</Button>)}
+                        </Container>
+                        </Navbar>        
+                
+                {isLoggedIn && (
+                
+                    <Container>
+                        <Nav className="me-auto">
+                            <Nav.Link as={Link} to='/user-expense'>Daily Expense</Nav.Link>
+                        </Nav>
+                    </Container>
+                
+            )}
+            
         </header>
     );
 
