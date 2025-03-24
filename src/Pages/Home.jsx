@@ -1,14 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import useAuth from "../store/auth-context";
+//import useAuth from "../store/auth-context";
 import { Container, Row, Col, Button } from "react-bootstrap";
 //import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const API_KEY = `AIzaSyAWVnD8ZpwnamACMsH-P3a-kmn1_BVi8q8`;
   const EMAIL_VERIFICATON_URL = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`;
 
-  const { token } = useAuth();
+  //const { token } = useAuth();
+
+  const token=useSelector((state)=>state.auth.token)
 
   const verifyEmail = async () => {
     if (!token) {

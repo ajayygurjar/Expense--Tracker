@@ -1,13 +1,23 @@
 import { Link, NavLink,useNavigate, } from "react-router-dom";
-import useAuth from "../../store/auth-context";
+//import useAuth from "../../store/auth-context";
 import { Container,Nav,Navbar,Button } from "react-bootstrap";
+
+import { useDispatch,useSelector } from "react-redux";
+import { authActions } from "../../store/auth-reducer";
 const Header=()=>{
 
     const navigateTo=useNavigate()
-    const {isLoggedIn,handleLogOut}=useAuth()
+    //const {isLoggedIn,handleLogOut}=useAuth()
+
+    const dispatch=useDispatch();
+    const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn);
+
 
     const logOut=()=>{
-        handleLogOut();
+        //handleLogOut();
+        localStorage.removeItem('token');
+        dispatch(authActions.handleLogout());
+
         navigateTo('/',{replace:true});
     }
 

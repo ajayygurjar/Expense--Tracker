@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
-import useAuth from "./store/auth-context";
+//import useAuth from "./store/auth-context";
 import RootLayout from "./components/Layout/RootLayout";
 import Home from "./Pages/Home";
 import SignInPage from "./Pages/SignInPage";
@@ -7,9 +7,13 @@ import Profile from "./Pages/Profile";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ExpensePage from "./Pages/ExpensePage";
 import { ExpenseContextProvider } from "./store/expense-context";
+import { useSelector } from "react-redux";
+
 
 function App() {
-  const { isLoggedIn } = useAuth();
+const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn)
+
+  //const { isLoggedIn } = useAuth();
 
   const router = createBrowserRouter([
     {

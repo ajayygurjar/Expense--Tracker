@@ -1,6 +1,10 @@
-import {  useEffect } from "react";
-import { Container, Form, Button ,Row,Col} from "react-bootstrap";
-import useExpense from "../../store/expense-context";
+import React, { useState, useCallback } from "react";
+import { Container, Form, Button, Row, Col } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { expenseActions } from "../../store/expense-reducer";
+import axios from "axios";
+
+const RTDB_URL = `https://expensetracker-d2edf-default-rtdb.asia-southeast1.firebasedatabase.app/userExpense`;
 
 const options = [
   "Grocery",
@@ -12,104 +16,100 @@ const options = [
 ];
 
 const ExpenseForm = () => {
-  const { setExpense, addExpense, expenseUpdateHandler, editExpense, setEditExpense } = useExpense();
-  const { amount, setAmount, description, setDescription, category, setCategory } = setExpense;
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState(""); 
+  const [category, setCategory] = useState("");
+
+  const dispatch = useDispatch();
 
   const handleExpense = (e) => {
     e.preventDefault();
 
     const expense = {
       amount: amount,
-      description: description,
+      description: description, 
       category: category,
     };
+    addtoExpenseList(expense)
 
-    
-    if (editExpense) {
-      expenseUpdateHandler(expense, editExpense.id);
-    } else {
-      addExpense(expense);  
-    }
+    setAmount("");
+    setDescription("");
+    setCategory("");
+  }
 
-    
-    setAmount("");         
-    setDescription("");    
-    setCategory("");       
+  const addtoExpenseList = useCallback(
+    async (item) => {
+      try {
+        const response = await axios.post(`${RTDB_URL}.json`, item);
+        console.log(response.status, response.statusText, "Expense ADD success");
+        dispatch(
+          expenseActions.addtoExpenseList({
+            ...item,
+            id: response.data.name,
+          })
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [dispatch]
+  );
 
-    
-    if (editExpense) {
-      setEditExpense(null);
-    }
-  };
+  return (
+    <Container className="mt-4">
+      <Row className="justify-content-center">
+        <Col md={6} lg={4}>
+          <Form onSubmit={handleExpense}>
+            <Form.Group className="mb-3">
+              <Form.Label>Expense Amount</Form.Label>
+              <Form.Control
+                id="expense"
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                required
+                placeholder="Enter expense amount"
+              />
+            </Form.Group>
 
-  
-  useEffect(() => {
-    if (editExpense) {
-      setAmount(editExpense.amount);
-      setDescription(editExpense.description);
-      setCategory(editExpense.category);
-    } else {
-      
-      setAmount("");
-      setDescription("");
-      setCategory("");
-    }
-  }, [editExpense]);
+            <Form.Group className="mb-3">
+              <Form.Label>Description of Expense</Form.Label>
+              <Form.Control
+                id="expense-description"
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)} 
+                required
+                placeholder="Enter description"
+              />
+            </Form.Group>
 
-  return (  <Container className="mt-4">
-    <Row className="justify-content-center">
-      <Col md={6} lg={4}>
-        <Form onSubmit={handleExpense}>
-          <Form.Group className="mb-3" controlId="formExpenseAmount">
-            <Form.Label>Expense Amount</Form.Label>
-            <Form.Control
-              id="expense"
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-              placeholder="Enter expense amount"
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formExpenseDescription">
-            <Form.Label>Description of Expense</Form.Label>
-            <Form.Control
-              id="expense-description"
-              type="text"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              placeholder="Enter description"
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formExpenseCategory">
-            <Form.Label>Category</Form.Label>
-            <Form.Control
-              as="select"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              required
-            >
-              <option value="" disabled>
-                Select an option
-              </option>
-              {options.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
+            <Form.Group className="mb-3">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                as="select"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                required
+              >
+                <option value="" disabled>
+                  Select an option
                 </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
+                {options.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
 
-          <Button variant="primary" type="submit">
-            {editExpense ? "Update" : "Add"} Expense
-          </Button>
-        </Form>
-      </Col>
-    </Row>
-  </Container>
+            <Button variant="primary" type="submit">
+              Add Expense
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

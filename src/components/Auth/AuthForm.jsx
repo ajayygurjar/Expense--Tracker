@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../store/auth-context";
+//import useAuth from "../../store/auth-context";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/auth-reducer";
+import { useSelector } from "react-redux";
 
 const AuthForm = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +18,12 @@ const AuthForm = () => {
 
   const navigate = useNavigate(); // Navigation hook
 
-  const { handleLogIn } = useAuth();
+  //const { handleLogIn } = useAuth();
+  const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn)
+
+  const dispatch=useDispatch();
+
+
 
   const API_KEY = "AIzaSyAWVnD8ZpwnamACMsH-P3a-kmn1_BVi8q8";
   const SIGNUP_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
@@ -28,6 +36,7 @@ const AuthForm = () => {
   };
 
   const authFormHandler = async (event) => {
+    
     event.preventDefault();
     const userAuthData = {
       email,
@@ -44,15 +53,28 @@ const AuthForm = () => {
     try {
       // SignIn flow
       if (!isSignUp) {
+        
         const response = await axios.post(SIGNIN_URL, userAuthData);
-        handleLogIn(response.data.idToken, email); 
-        setEmail(""); 
-        setPassword("");
+        
+       // handleLogIn(response.data.idToken, email); 
+        //setEmail(""); 
+        //setPassword("");
+
+        const token=response.data.idToken;
+        const userID=response.data.localId;
+
+        localStorage.setItem('token',token)
+
+        dispatch(authActions.handleLogIn({token,userID}))
+
         navigate("/home", { replace: true }); // Navigate to home
+        setEmail('')
+        setPassword('')
       } else {
         // SignUp flow
         const response = await axios.post(SIGNUP_URL, userAuthData);
         console.log(response.data);
+        dispatch(authActions.handleLogIn(response.data.idToken));
         setEmail(""); 
         setPassword("");
         setConfirmPassword(""); 

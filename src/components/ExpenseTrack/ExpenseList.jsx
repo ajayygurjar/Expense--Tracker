@@ -1,19 +1,27 @@
-import useExpense from "../../store/expense-context";
+//import useExpense from "../../store/expense-context";
 import { Container,Row,Col,Button, ButtonGroup ,ListGroup} from "react-bootstrap";
+import { useDispatch,useSelector } from "react-redux";
+import { expenseActions } from "../../store/expense-reducer";
+
+
 
 const ExpenseList = () => {
-    const { expenseList, expenseDeleteHandler, handleEditExpense } =
- 		useExpense();
+    //const { expenseList, expenseDeleteHandler, handleEditExpense } =useExpense();
+
+
+    const expenseList=useSelector((state)=>state.expense.expenseList);
+    const dispatch=useDispatch();
  
  	
  
  	const handleDelete = (id) => {
- 		expenseDeleteHandler(id);
+ 		dispatch(expenseActions.expenseDeleteHandler(id))
  	};
  
  	const handleEdit = (item) => {
  		
- 		handleEditExpense(item);
+ 		//handleEditExpense(item);
+    
  	};
 
     return (

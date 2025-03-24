@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import useAuth from "../store/auth-context";
+//import useAuth from "../store/auth-context";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
+
 
 const API_KEY = `AIzaSyAWVnD8ZpwnamACMsH-P3a-kmn1_BVi8q8`;
 const UPDATE_PROFILE_URL = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${API_KEY}`;
@@ -12,7 +14,11 @@ const Profile = () => {
   const [displayName, setDisplayName] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
 
-  const { token } = useAuth();
+  //const { token } = useAuth();
+
+
+
+  const token=useSelector((state)=>state.auth.token)
 
   useEffect(() => {
     if (token) {
@@ -67,7 +73,7 @@ const Profile = () => {
         </div>
 
         <Form onSubmit={handleProfileSubmit}>
-          <Form.Group className="mb-3" controlId="formFullName">
+          <Form.Group className="mb-3" >
             <Form.Label>Full Name:</Form.Label>
             <Form.Control
               id="name"
@@ -80,7 +86,7 @@ const Profile = () => {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formProfilePhoto">
+          <Form.Group className="mb-3" >
             <Form.Label>Profile Photo URL:</Form.Label>
             <Form.Control
               id="photoUrl"
