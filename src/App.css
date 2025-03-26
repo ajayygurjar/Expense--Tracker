@@ -1,0 +1,30 @@
+/* Default Light Mode styles */
+body {
+    background-color: white;
+    color: black;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Dark Mode Styles */
+  .dark-mode {
+    background-color: #333; /* Dark background */
+    color: white;           /* Light text */
+  }
+  
+  .dark-mode button {
+    background-color: #444;
+    color: white;
+    border: 1px solid #555;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  
+  button:hover {
+    opacity: 0.8;
+  }
+  
+  /* Any other necessary styles for dark mode */
+  

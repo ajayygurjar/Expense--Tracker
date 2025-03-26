@@ -8,12 +8,23 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import ExpensePage from "./Pages/ExpensePage";
 import { ExpenseContextProvider } from "./store/expense-context";
 import { useSelector } from "react-redux";
+import './App.css';
 
 
 function App() {
-const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn)
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn || state.auth.token);
+const isDarkMode = useSelector((state) => state.theme.isDarkMode);
 
-  //const { isLoggedIn } = useAuth();
+
+
+if (isDarkMode) {
+  document.body.classList.add('dark-mode');  
+} else {
+  document.body.classList.remove('dark-mode');  
+}
+
+
+  
 
   const router = createBrowserRouter([
     {
@@ -30,9 +41,11 @@ const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn)
   ]);
 
   return (
+    <div>
     <ExpenseContextProvider>
       <RouterProvider router={router} />
     </ExpenseContextProvider>
+    </div>
   );
 }
 

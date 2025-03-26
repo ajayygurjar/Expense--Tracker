@@ -4,13 +4,17 @@ import { Container,Nav,Navbar,Button } from "react-bootstrap";
 
 import { useDispatch,useSelector } from "react-redux";
 import { authActions } from "../../store/auth-reducer";
+
+import { themeActions } from "../../store/theme-reducer";
 const Header=()=>{
 
     const navigateTo=useNavigate()
-    //const {isLoggedIn,handleLogOut}=useAuth()
+    
 
     const dispatch=useDispatch();
     const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn);
+    
+    const isDarkMode = useSelector((state) => state.theme.isDarkMode);
 
 
     const logOut=()=>{
@@ -21,6 +25,11 @@ const Header=()=>{
         navigateTo('/',{replace:true});
     }
 
+
+    const toggleTheme = () => {
+        dispatch(themeActions.themeToggle());  // Toggle dark mode
+      };
+    
 
 
     return (
@@ -47,6 +56,12 @@ const Header=()=>{
                     </Container>
                 
             )}
+            
+            <div>
+            <button onClick={toggleTheme}>
+      Switch to {isDarkMode ? 'Light' : 'Dark'} Mode
+    </button>
+            </div>
             
         </header>
     );
