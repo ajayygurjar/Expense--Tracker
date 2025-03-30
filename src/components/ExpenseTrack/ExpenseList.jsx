@@ -5,12 +5,14 @@ import { expenseActions } from "../../store/expense-reducer";
 
 
 
-const ExpenseList = () => {
+
+const ExpenseList = ({handleEditExpenseData}) => {
     //const { expenseList, expenseDeleteHandler, handleEditExpense } =useExpense();
 
 
     const expenseList=useSelector((state)=>state.expense.expenseList);
     const dispatch=useDispatch();
+    
  
  	
  
@@ -18,18 +20,17 @@ const ExpenseList = () => {
  		dispatch(expenseActions.expenseDeleteHandler(id))
  	};
  
- 	const handleEdit = (item) => {
- 		
- 		//handleEditExpense(item);
-    
- 	};
+   const handleEdit = async (expense) => {
+    handleEditExpenseData(expense)
+  };
+
 
     return (
         
         <Container className="mt-4">
       <Row className="justify-content-center">
         <Col md={8} lg={6}>
-          <ListGroup>
+          <ListGroup> 
             {expenseList.map((expense, index) => (
               <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center mb-3">
                 
