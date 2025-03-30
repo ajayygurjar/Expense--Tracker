@@ -6,6 +6,7 @@ import SignInPage from "./Pages/SignInPage";
 import Profile from "./Pages/Profile";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ExpensePage from "./Pages/ExpensePage";
+import About from "./Pages/About";
 import { ExpenseContextProvider } from "./store/expense-context";
 import { useSelector } from "react-redux";
 import './App.css';
@@ -33,6 +34,7 @@ if (isDarkMode) {
       children: [
         { path: "/", element: isLoggedIn ? <Navigate to="/home" /> : <SignInPage /> },
         { path: "/home", element: isLoggedIn ? <Home /> : <Navigate to="/" /> },
+        { path: "/about", element: <About /> },
         { path: "/profile", element: isLoggedIn ? <Profile /> : <Navigate to="/" /> },
         { path: "/forgot-password", element: !isLoggedIn ? <ForgotPassword /> : <Navigate to="/home" /> },
         { path: "/user-expense", element: isLoggedIn ? <ExpensePage /> : <Navigate to="/" /> },

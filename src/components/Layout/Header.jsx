@@ -41,7 +41,7 @@ const Header=()=>{
                         <Nav className="justify-content-center">
                             <Nav.Link as={NavLink} to='/home'>Home</Nav.Link>
                             <Nav.Link as={NavLink} to='/home'>Products</Nav.Link>
-                            <Nav.Link as={NavLink} to='/home'>About Us</Nav.Link>
+                            <Nav.Link as={NavLink} to='/about'>About Us</Nav.Link>
                         </Nav>
                         {isLoggedIn&& (<Button onClick={logOut} variant="outline-light">Logout</Button>)}
                         </Container>
