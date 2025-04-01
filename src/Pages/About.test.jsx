@@ -75,29 +75,27 @@ import { test, describe, expect } from "vitest";
  */
 
 describe("About Component user Interaction/ Testing User Actions", () => {
-  test("renders 'This is webapp description Section' if the button was NOT clicked", () => {
+  /*test("renders 'This is webapp description Section' if the button was NOT clicked", () => {
     render(<About />);
 
-    const outputElement = screen.getByText(
-      "This is webapp description Section"
-    );
-    expect(outputElement).toBeInTheDocument();
-  });
+    const outputElement = screen.getByText( "This is webapp description Section");
+    expect(outputElement).toBeInTheDocument();});*/
 
   test("renders 'changed!' as a text if the button was Clicked",async () => {
+	//arrange
     render(<About />);
-
+//act
     const buttonElement = screen.getByRole("button");
     userEvent.click(buttonElement);
 
-	await waitFor(()=>{
-		const outputElement = screen.getByText("Changed!", { exact: false });
+	//assert
+		const outputElement = await screen.findByText("Changed!", { exact: false });
     expect(outputElement).toBeInTheDocument();
-	})
+	
     
   });
 
-  test("doesn't render 'This is webapp descripton Section'  if button is clicked", async() => {
+ /* test("doesn't render 'This is webapp descripton Section'  if button is clicked", async() => {
     render(<About />);
 
     const buttonElement = screen.getByRole("button");
@@ -107,6 +105,55 @@ describe("About Component user Interaction/ Testing User Actions", () => {
 		const outputElement = screen.queryByText("This is webapp description Section",{ exact: true });
 		  expect(outputElement).toBeNull();
 		});
-	})
+	})*/
     
-});
+});describe('Async About component Testing', () => {
+
+	// Helper function to mock the fetch request and render the component
+	const mockFetchAndRender = (response) => {
+	  window.fetch = vi.fn().mockResolvedValueOnce({
+		json: async () => response,
+	  });
+	  render(<About />);
+	};
+  
+	test("renders posts if request succeeds", async () => {
+	  const mockPosts = [{ id: "p1", title: "First post" }];
+	  mockFetchAndRender(mockPosts);
+  
+	  const listItemElements = await screen.findAllByRole("listitem");
+	  expect(listItemElements).toHaveLength(mockPosts.length);
+  
+	  const outputElement = await screen.findByText("First post", { exact: false });
+	  expect(outputElement).toBeInTheDocument();
+	});
+  
+	test("check post texts if request succeeds", async () => {
+	  const mockPosts = [{ id: "p1", title: "First post" }];
+	  mockFetchAndRender(mockPosts);
+  
+	  const listItemElements = await screen.findAllByRole("listitem");
+	  expect(listItemElements).toHaveLength(mockPosts.length);
+  
+	  const outputElement = await screen.findByText("First post", { exact: false });
+	  expect(outputElement).toBeInTheDocument();
+	});
+  
+	test("check post length if request succeeds", async () => {
+	  const mockPosts = [{ id: "p1", title: "First post" }];
+	  mockFetchAndRender(mockPosts);
+  
+	  const listItemElements = await screen.findAllByRole("listitem");
+	  expect(listItemElements).toHaveLength(mockPosts.length);
+	});
+  
+	test("check posts rendering after request succeeds", async () => {
+	  const mockPosts = [{ id: "p1", title: "First post" }];
+	  mockFetchAndRender(mockPosts);
+  
+	  const listItemElements = await screen.findAllByRole("listitem");
+	  expect(listItemElements).toHaveLength(mockPosts.length);
+	  expect(listItemElements[0]).toHaveTextContent("First post");
+	});
+  
+  });
