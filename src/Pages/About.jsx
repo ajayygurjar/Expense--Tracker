@@ -1,20 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const About = () => {
-	const [changedText, setChangedText] = useState();
+	const [changedText, setChangedText] = useState(false);
 	const changeTextHandler = () => {
 		setChangedText(true);
 	};
 
-	const [posts, setPosts] = useState([]);
+	
 
-	useEffect(() => {
-		fetch("https://jsonplaceholder.typicode.com/posts")
-			.then((response) => response.json())
-			.then((data) => {
-				setPosts(data);
-			});
-	}, []);
+	
 	return (
 		<div>
 			<h1>About Page</h1>
@@ -45,16 +39,6 @@ const About = () => {
 			<button type="button" onClick={changeTextHandler}>
 				Change Text
 			</button>
-
-			<div>
-				<h3>Services</h3>
-
-				<ul>
-					{posts.map((post) => (
-						<li key={post.id}>{post.title}</li>
-					))}
-				</ul>
-			</div>
 		</div>
 	);
 };
