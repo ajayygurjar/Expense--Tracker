@@ -1,6 +1,9 @@
-import { render, screen } from "@testing-library/react";
- import About from "./About";
- 
+import { render, screen, waitFor } from "@testing-library/react";
+import About from "./About";
+import userEvent from "@testing-library/user-event";
+import { test, describe, expect } from "vitest";
+
+/*
  describe("About Component", () => {
  	test("renders About Page as a text", () => {
  		//Arrange
@@ -68,3 +71,42 @@ import { render, screen } from "@testing-library/react";
  		expect(AboutElement).toBeInTheDocument();
  	});
  });
+
+ */
+
+describe("About Component user Interaction/ Testing User Actions", () => {
+  test("renders 'This is webapp description Section' if the button was NOT clicked", () => {
+    render(<About />);
+
+    const outputElement = screen.getByText(
+      "This is webapp description Section"
+    );
+    expect(outputElement).toBeInTheDocument();
+  });
+
+  test("renders 'changed!' as a text if the button was Clicked",async () => {
+    render(<About />);
+
+    const buttonElement = screen.getByRole("button");
+    userEvent.click(buttonElement);
+
+	await waitFor(()=>{
+		const outputElement = screen.getByText("Changed!", { exact: false });
+    expect(outputElement).toBeInTheDocument();
+	})
+    
+  });
+
+  test("doesn't render 'This is webapp descripton Section'  if button is clicked", async() => {
+    render(<About />);
+
+    const buttonElement = screen.getByRole("button");
+    userEvent.click(buttonElement);
+
+	await waitFor(()=>{
+		const outputElement = screen.queryByText("This is webapp description Section",{ exact: true });
+		  expect(outputElement).toBeNull();
+		});
+	})
+    
+});
