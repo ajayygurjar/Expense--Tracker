@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect,useState } from "react";
 import ExpenseForm from "../components/ExpenseTrack/ExpenseForm";
 import ExpenseList from "../components/ExpenseTrack/ExpenseList";
 import axios from "axios";
@@ -10,7 +10,7 @@ const RTDB_URL = `https://expensetracker-d2edf-default-rtdb.asia-southeast1.fire
 
 const ExpensePage = () => {
   const dispatch = useDispatch();
-  
+  const [expenseToEdit, setExpenseToEdit] = useState(null);
   
   const fetchExpenseList = useCallback(async () => {
     try {
@@ -28,6 +28,16 @@ const ExpensePage = () => {
   useEffect(() => {
     fetchExpenseList();
   }, [fetchExpenseList]);
+
+
+  const handleEditExpenseData = (expense) => {
+    setExpenseToEdit(expense);
+  };
+
+  const handleEditSuccess = () => {
+    setExpenseToEdit(null); // Reset after successful edit
+    fetchExpenseList(); // Refetch the list to reflect changes
+  };
 
   
   const expenseList = useSelector((state) => state.expense.expenseList);
@@ -64,8 +74,8 @@ const ExpensePage = () => {
 
   return (
     <div className={isDarkMode ? "dark-theme" : "light-theme"}>
-      <ExpenseForm />
-      <ExpenseList />
+      <ExpenseForm expenseToEdit={expenseToEdit} onEditSuccess={handleEditSuccess} />
+      <ExpenseList handleEditExpenseData={handleEditExpenseData} />
       
       {/* Button to activate Premium */}
       {totalExpense > 10000 &&  (

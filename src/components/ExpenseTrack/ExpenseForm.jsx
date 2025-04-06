@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback,useEffect } from "react";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { expenseActions } from "../../store/expense-reducer";
@@ -15,12 +15,25 @@ const options = [
   "Shopping",
 ];
 
-const ExpenseForm = () => {
+const ExpenseForm = ({expenseToEdit,onEditSuccess}) => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState(""); 
   const [category, setCategory] = useState("");
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (expenseToEdit) {
+      setAmount(expenseToEdit.amount);
+      setDescription(expenseToEdit.description);
+      setCategory(expenseToEdit.category);
+    }
+  }, [expenseToEdit]);
+
+
+
+
+
 
   const handleExpense = (e) => {
     e.preventDefault();
@@ -30,7 +43,12 @@ const ExpenseForm = () => {
       description: description, 
       category: category,
     };
-    addtoExpenseList(expense)
+   
+    if (expenseToEdit) {
+      updateExpense(expense);
+    } else {
+      addtoExpenseList(expense);
+    }
 
     setAmount("");
     setDescription("");
@@ -54,6 +72,22 @@ const ExpenseForm = () => {
     },
     [dispatch]
   );
+
+  
+  const updateExpense = async (item) => {
+    try {
+      await axios.put(`${RTDB_URL}/${expenseToEdit.id}.json`, item);
+      dispatch(
+        expenseActions.updateExpenseList({
+          ...item,
+          id: expenseToEdit.id,
+        })
+      );
+      if (onEditSuccess) onEditSuccess();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Container className="mt-4">
@@ -104,7 +138,7 @@ const ExpenseForm = () => {
             </Form.Group>
 
             <Button variant="primary" type="submit">
-              Add Expense
+            {expenseToEdit ? "Update Expense" : "Add Expense"}
             </Button>
           </Form>
         </Col>

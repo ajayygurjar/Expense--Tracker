@@ -16,6 +16,12 @@ import { createSlice } from "@reduxjs/toolkit";
  				(item) => item.id !== action.payload,
  			);
  		},
+		 updateExpenseList(state, action) {
+			const updatedExpense = action.payload;
+			state.expenseList = state.expenseList.map((expense) =>
+			  expense.id === updatedExpense.id ? updatedExpense : expense
+			);
+		  },
  	},
  });
  
