@@ -5,7 +5,7 @@ import Home from "./Pages/Home";
 import SignInPage from "./Pages/SignInPage";
 import Profile from "./Pages/Profile";
 import ForgotPassword from "./Pages/ForgotPassword";
-import ExpensePage from "./Pages/ExpensePage";
+import ExpensePage from "./components/ExpenseTrack/ExpensePage";
 import About from "./Pages/About";
 import { useSelector } from "react-redux";
 import './App.css';

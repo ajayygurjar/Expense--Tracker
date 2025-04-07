@@ -2,12 +2,14 @@
 import { Container,Row,Col,Button, ButtonGroup ,ListGroup} from "react-bootstrap";
 import { useDispatch,useSelector } from "react-redux";
 import { expenseActions } from "../../store/expense-reducer";
+import axios from "axios";
 
+const RTDB_URL = `https://expensetracker-d2edf-default-rtdb.asia-southeast1.firebasedatabase.app/userExpense`;
 
 
 
 const ExpenseList = ({handleEditExpenseData}) => {
-    //const { expenseList, expenseDeleteHandler, handleEditExpense } =useExpense();
+    
 
 
     const expenseList=useSelector((state)=>state.expense.expenseList);
@@ -16,8 +18,20 @@ const ExpenseList = ({handleEditExpenseData}) => {
  
  	
  
- 	const handleDelete = (id) => {
- 		dispatch(expenseActions.expenseDeleteHandler(id))
+ 	const handleDelete =async (id) => {
+
+
+    try {
+
+      await axios.delete(`${RTDB_URL}/${id}.json`)
+
+      dispatch(expenseActions.expenseDeleteHandler(id))
+    } catch (error) {
+      console.log(error)
+    }
+ 		
+
+
  	};
  
    const handleEdit = async (expense) => {

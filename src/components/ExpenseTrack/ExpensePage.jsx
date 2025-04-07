@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect,useState } from "react";
-import ExpenseForm from "../components/ExpenseTrack/ExpenseForm";
-import ExpenseList from "../components/ExpenseTrack/ExpenseList";
+import  { useCallback, useEffect,useState } from "react";
+import ExpenseForm from "./ExpenseForm";
+import ExpenseList from "./ExpenseList";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { expenseActions } from "../store/expense-reducer";
-import { themeActions } from "../store/theme-reducer";
+import { expenseActions } from "../../store/expense-reducer";
+import { themeActions } from "../../store/theme-reducer";
 
 const RTDB_URL = `https://expensetracker-d2edf-default-rtdb.asia-southeast1.firebasedatabase.app/userExpense`;
 
@@ -74,7 +74,7 @@ const ExpensePage = () => {
 
   return (
     <div className={isDarkMode ? "dark-theme" : "light-theme"}>
-      <ExpenseForm expenseToEdit={expenseToEdit} onEditSuccess={handleEditSuccess} />
+      <ExpenseForm expenseToEdit={expenseToEdit} onEditSuccess={handleEditSuccess}  />
       <ExpenseList handleEditExpenseData={handleEditExpenseData} />
       
       {/* Button to activate Premium */}
