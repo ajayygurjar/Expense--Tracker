@@ -1,3 +1,5 @@
+import { Container, Row, Col, Button, Card } from "react-bootstrap"
+
 import  { useCallback, useEffect,useState } from "react";
 import ExpenseForm from "./ExpenseForm";
 import ExpenseList from "./ExpenseList";
@@ -73,39 +75,50 @@ const ExpensePage = () => {
   };
 
   return (
-    <div className={isDarkMode ? "dark-theme" : "light-theme"}>
-      <ExpenseForm expenseToEdit={expenseToEdit} onEditSuccess={handleEditSuccess}  />
-      <ExpenseList handleEditExpenseData={handleEditExpenseData} />
-      
-      {/* Button to activate Premium */}
-      {totalExpense > 10000 &&  (
-        <button
-          onClick={handlePremiumActivation}
-          style={{
-            borderRadius: "0.375rem",
-            backgroundColor: "#b45309",
-            padding: "0.25rem 0.5rem",
-          }}
-        >
-          Activate Premium
-        </button>
+    <Container fluid className={isDarkMode ? "bg-dark text-white py-4" : "bg-light text-dark py-4"} style={{ minHeight: "100vh" }}>
+      <h2 className="text-center mb-4">Expense Tracker</h2>
+
+      <Row className="justify-content-center">
+        <Col md={8} lg={6}>
+          <Card className="mb-4 shadow-sm">
+            <Card.Body>
+              <ExpenseForm expenseToEdit={expenseToEdit} onEditSuccess={handleEditSuccess} />
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row className="justify-content-center">
+        <Col md={10}>
+          <Card className="mb-4 shadow-sm">
+            <Card.Body>
+              <ExpenseList handleEditExpenseData={handleEditExpenseData} />
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      {totalExpense > 10000 && (
+        <Row className="justify-content-center">
+          <Col md="auto">
+            <Button variant="warning" onClick={handlePremiumActivation} className="mb-3">
+              Activate Premium
+            </Button>
+          </Col>
+        </Row>
       )}
-      
-      
-      {/* Download CSV button */}
-      <button
-        onClick={downloadCSV}
-        style={{
-          borderRadius: "0.375rem",
-          backgroundColor: "#28a745",
-          padding: "0.25rem 0.5rem",
-          marginTop: "10px",
-        }}
-      >
-        Download Expenses as CSV
-      </button>
-    </div>
+
+      <Row className="justify-content-center">
+        <Col md="auto">
+          <Button variant="success" onClick={downloadCSV}>
+            Download Expenses as CSV
+          </Button>
+        </Col>
+      </Row>
+      </Container>
   );
 };
 
 export default ExpensePage;
+
+

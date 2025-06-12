@@ -78,6 +78,7 @@ const AuthForm = () => {
         setEmail(""); 
         setPassword("");
         setConfirmPassword(""); 
+        navigate("/home", { replace: true }); 
       
       }
     } catch (error) {
@@ -107,7 +108,7 @@ const AuthForm = () => {
     setEmail("");
     setPassword("");
     setConfirmPassword("");
-    setErrorMessage(""); // Reset error messages on toggle
+    setErrorMessage(""); 
   };
 
   return (
@@ -166,11 +167,13 @@ const AuthForm = () => {
               </Form>
 
               {/* Forgot Password Link */}
+              {!isSignUp && (
               <div className="mt-3">
                 <Button variant="link" onClick={() => navigate("/forgot-password")}>
                   Forgot Password?
                 </Button>
               </div>
+              )}
 
               
               <div className="mt-3">

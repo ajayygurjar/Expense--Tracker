@@ -5,7 +5,6 @@ import { Container,Nav,Navbar,Button } from "react-bootstrap";
 import { useDispatch,useSelector } from "react-redux";
 import { authActions } from "../../store/auth-reducer";
 
-import { themeActions } from "../../store/theme-reducer";
 const Header=()=>{
 
     const navigateTo=useNavigate()
@@ -14,7 +13,7 @@ const Header=()=>{
     const dispatch=useDispatch();
     const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn);
     
-    const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+   
 
 
     const logOut=()=>{
@@ -26,9 +25,7 @@ const Header=()=>{
     }
 
 
-    const toggleTheme = () => {
-        dispatch(themeActions.themeToggle());  // Toggle dark mode
-      };
+
     
 
 
@@ -36,32 +33,17 @@ const Header=()=>{
         <header >
             <Navbar bg="dark" variant="dark" expand='lg'>
                 <Container className="justify-content-start">
-                    <Navbar.Brand href='/'>MyWebLink</Navbar.Brand>
+                    <Navbar.Brand href='/'>Expense Tracker</Navbar.Brand>
 
                         <Nav className="justify-content-center">
                             <Nav.Link as={NavLink} to='/home'>Home</Nav.Link>
-                            <Nav.Link as={NavLink} to='/home'>Products</Nav.Link>
+                            {isLoggedIn && <Nav.Link as={Link} to='/user-expense'>Daily Expense</Nav.Link> }
                             <Nav.Link as={NavLink} to='/about'>About Us</Nav.Link>
                         </Nav>
                         {isLoggedIn&& (<Button onClick={logOut} variant="outline-light">Logout</Button>)}
                         </Container>
                         </Navbar>        
-                
-                {isLoggedIn && (
-                
-                    <Container>
-                        <Nav className="me-auto">
-                            <Nav.Link as={Link} to='/user-expense'>Daily Expense</Nav.Link>
-                        </Nav>
-                    </Container>
-                
-            )}
             
-            <div>
-            <button onClick={toggleTheme}>
-      Switch to {isDarkMode ? 'Light' : 'Dark'} Mode
-    </button>
-            </div>
             
         </header>
     );
