@@ -31,18 +31,41 @@ const Header=()=>{
 
     return (
         <header >
-            <Navbar bg="dark" variant="dark" expand='lg'>
-                <Container className="justify-content-start">
-                    <Navbar.Brand href='/'>Expense Tracker</Navbar.Brand>
+      <Navbar bg="dark" variant="dark" expand="lg">
+        <Container>
+          <Navbar.Brand as={Link} to="/">
+            Expense Tracker
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbar-nav" />
+          
+          <Navbar.Collapse id="navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link as={NavLink} to="/home">
+                Home
+              </Nav.Link>
+              {isLoggedIn && (
+                <Nav.Link as={NavLink} to="/user-expense">
+                  Daily Expense
+                </Nav.Link>
+              )}
+              <Nav.Link as={NavLink} to="/about">
+                About Us
+              </Nav.Link>
+            </Nav>
 
-                        <Nav className="justify-content-center">
-                            <Nav.Link as={NavLink} to='/home'>Home</Nav.Link>
-                            {isLoggedIn && <Nav.Link as={Link} to='/user-expense'>Daily Expense</Nav.Link> }
-                            <Nav.Link as={NavLink} to='/about'>About Us</Nav.Link>
-                        </Nav>
-                        {isLoggedIn&& (<Button onClick={logOut} variant="outline-light">Logout</Button>)}
-                        </Container>
-                        </Navbar>        
+            {isLoggedIn && (
+              <Button
+                variant="outline-danger"
+                className="ms-auto"
+                onClick={logOut}
+              >
+                Logout
+              </Button>
+            )}
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+        
             
             
         </header>
