@@ -1,23 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
-//import useAuth from "../store/auth-context";
-import { Container, Row, Col, Button } from "react-bootstrap";
-//import axios from "axios";
+import { Container, Row, Col, Button, Card, Alert } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 const Home = () => {
   const API_KEY = `AIzaSyAWVnD8ZpwnamACMsH-P3a-kmn1_BVi8q8`;
   const EMAIL_VERIFICATON_URL = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`;
-
-  //const { token } = useAuth();
-
-  const token=useSelector((state)=>state.auth.token)
+  const token = useSelector((state) => state.auth.token);
 
   const verifyEmail = async () => {
     if (!token) {
-      alert("You need to be logged in to verify your email");
+      alert("You need to be logged in to verify your email.");
       return;
     }
+
     try {
       const response = await fetch(EMAIL_VERIFICATON_URL, {
         method: "POST",
@@ -29,52 +25,50 @@ const Home = () => {
           idToken: token,
         }),
       });
+
+      const data = await response.json();
+
       if (response.ok) {
-        const data = await response.json();
-        alert("check your email and verify the email");
+        alert("Check your email and verify your account.");
         console.log(data);
       } else {
-        const data = await response.json();
-        let errorMessage = "verify fails";
-        if (data && data.error && data.error.message) {
-          errorMessage = data.error.message;
-        }
+        let errorMessage = data?.error?.message || "Verification failed.";
         throw new Error(errorMessage);
       }
     } catch (error) {
       if (error.message.includes("INVALID_ID_TOKEN")) {
-        alert("your session has expired. Please sign in again.");
+        alert("Session expired. Please sign in again.");
       } else if (error.message.includes("USER_NOT_FOUND")) {
-        alert("No user found.Please sign up or login.");
+        alert("No user found. Please sign up or login.");
       } else {
-        alert("An error occured: " + error.message);
+        alert("An error occurred: " + error.message);
       }
-      console.log(error);
+      console.error(error);
     }
   };
 
   return (
     <Container className="mt-5">
-    <Row className="justify-content-center">
-      <Col md={6} lg={4} className="text-center">
-        <h1>Welcome to Expense Tracker!!!</h1>
-        <hr />
-        <p>
-          Your profile is incomplete.{" "}
-          <Link to="/profile" className="text-decoration-none">
-            Complete now
-          </Link>
-        </p>
-        <Button
-          variant="primary"
-          onClick={verifyEmail}
-          style={{ marginLeft: "2rem" }}
-        >
-          Verify Email
-        </Button>
-      </Col>
-    </Row>
-  </Container>
+      <Row className="justify-content-center">
+        <Col md={8} lg={6}>
+          <Card className="shadow-sm text-center p-4">
+            <Card.Body>
+              <h2 className="mb-3">Welcome to Expense Tracker 🎯</h2>
+              <Alert variant="info" className="mb-3">
+                Your profile is incomplete.{" "}
+                <Link to="/profile" className="alert-link">
+                  Complete now
+                </Link>
+              </Alert>
+
+              <Button variant="primary" onClick={verifyEmail}>
+                Verify Email
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

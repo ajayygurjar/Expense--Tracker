@@ -19,11 +19,9 @@ const AuthForm = () => {
   const navigate = useNavigate(); // Navigation hook
 
   //const { handleLogIn } = useAuth();
-  const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn)
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  const dispatch=useDispatch();
-
-
+  const dispatch = useDispatch();
 
   const API_KEY = "AIzaSyAWVnD8ZpwnamACMsH-P3a-kmn1_BVi8q8";
   const SIGNUP_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
@@ -36,7 +34,6 @@ const AuthForm = () => {
   };
 
   const authFormHandler = async (event) => {
-    
     event.preventDefault();
     const userAuthData = {
       email,
@@ -53,33 +50,36 @@ const AuthForm = () => {
     try {
       // SignIn flow
       if (!isSignUp) {
-        
         const response = await axios.post(SIGNIN_URL, userAuthData);
-        
-       // handleLogIn(response.data.idToken, email); 
-        //setEmail(""); 
+
+        // handleLogIn(response.data.idToken, email);
+        //setEmail("");
         //setPassword("");
 
-        const token=response.data.idToken;
-        const userID=response.data.localId;
+        const token = response.data.idToken;
+        const userID = response.data.localId;
 
-        localStorage.setItem('token',token)
-
-        dispatch(authActions.handleLogIn({token,userID}))
+        localStorage.setItem("token", token);
+        localStorage.setItem("userID", userID);
+        dispatch(authActions.handleLogIn({ token, userID }));
 
         navigate("/home", { replace: true }); // Navigate to home
-        setEmail('')
-        setPassword('')
+        setEmail("");
+        setPassword("");
       } else {
         // SignUp flow
         const response = await axios.post(SIGNUP_URL, userAuthData);
-        console.log(response.data);
-        dispatch(authActions.handleLogIn(response.data.idToken));
-        setEmail(""); 
+
+        const token = response.data.idToken;
+        const userID = response.data.localId;
+
+        dispatch(authActions.handleLogIn({ token, userID }));
+        localStorage.setItem("token", token);
+        localStorage.setItem("userID", userID);
+        setEmail("");
         setPassword("");
-        setConfirmPassword(""); 
-        navigate("/home", { replace: true }); 
-      
+        setConfirmPassword("");
+        navigate("/home", { replace: true });
       }
     } catch (error) {
       if (error.response && error.response.data.error.message) {
@@ -91,7 +91,8 @@ const AuthForm = () => {
         } else if (errorMsg === "EMAIL_EXISTS") {
           showErrorMessage("Email already registered");
         } else if (
-          errorMsg === "WEAK_PASSWORD : Password should be at least 6 characters"
+          errorMsg ===
+          "WEAK_PASSWORD : Password should be at least 6 characters"
         ) {
           showErrorMessage("Password should be at least 6 characters");
         } else if (errorMsg === "INVALID_EMAIL") {
@@ -108,7 +109,7 @@ const AuthForm = () => {
     setEmail("");
     setPassword("");
     setConfirmPassword("");
-    setErrorMessage(""); 
+    setErrorMessage("");
   };
 
   return (
@@ -158,7 +159,9 @@ const AuthForm = () => {
                 )}
 
                 {/* Error Message */}
-                {isErrorVisible && <p style={{ color: "red" }}>{errorMessage}</p>}
+                {isErrorVisible && (
+                  <p style={{ color: "red" }}>{errorMessage}</p>
+                )}
 
                 {/* Submit Button */}
                 <Button variant="primary" type="submit">
@@ -168,17 +171,21 @@ const AuthForm = () => {
 
               {/* Forgot Password Link */}
               {!isSignUp && (
-              <div className="mt-3">
-                <Button variant="link" onClick={() => navigate("/forgot-password")}>
-                  Forgot Password?
-                </Button>
-              </div>
+                <div className="mt-3">
+                  <Button
+                    variant="link"
+                    onClick={() => navigate("/forgot-password")}
+                  >
+                    Forgot Password?
+                  </Button>
+                </div>
               )}
 
-              
               <div className="mt-3">
                 <Button variant="link" onClick={toggleSignUpLoginHandler}>
-                  {isSignUp ? "Have an account? Login" : "Don't have an account? Sign Up"}
+                  {isSignUp
+                    ? "Have an account? Login"
+                    : "Don't have an account? Sign Up"}
                 </Button>
               </div>
             </Col>
