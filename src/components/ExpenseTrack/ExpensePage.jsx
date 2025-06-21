@@ -1,6 +1,5 @@
-import { Container, Row, Col, Button, Card } from "react-bootstrap"
-
-import  { useCallback, useEffect,useState } from "react";
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
+import { useCallback, useEffect, useState } from "react";
 import ExpenseForm from "./ExpenseForm";
 import ExpenseList from "./ExpenseList";
 import axios from "axios";
@@ -13,15 +12,26 @@ const RTDB_URL = `https://expensetracker-d2edf-default-rtdb.asia-southeast1.fire
 const ExpensePage = () => {
   const dispatch = useDispatch();
   const [expenseToEdit, setExpenseToEdit] = useState(null);
-  
+  const [showModal, setShowModal] = useState(false); //Modal
+
+  const expenseList = useSelector((state) => state.expense.expenseList);
+  const totalExpense = expenseList.reduce((acc, curr) => acc + +curr.amount, 0);
+
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+
   const fetchExpenseList = useCallback(async () => {
     try {
       const response = await axios.get(`${RTDB_URL}.json`);
-      const fetchList = Object.keys(response.data).map((key) => ({
-        ...response.data[key],
-        id: key,
-      }));
-      dispatch(expenseActions.fetchExpenseList(fetchList));
+      if (response.data) {
+        const fetchList = Object.keys(response.data).map((key) => ({
+          ...response.data[key],
+          id: key,
+        }));
+        dispatch(expenseActions.fetchExpenseList(fetchList));
+      } else {
+        // Handle case when no data is returned
+        dispatch(expenseActions.fetchExpenseList([]));
+      }
     } catch (error) {
       console.log(error);
     }
@@ -31,6 +41,11 @@ const ExpensePage = () => {
     fetchExpenseList();
   }, [fetchExpenseList]);
 
+  useEffect(() => {
+    if (totalExpense <= 10000) {
+      dispatch(themeActions.resetTheme());
+    }
+  }, [totalExpense, dispatch]);
 
   const handleEditExpenseData = (expense) => {
     setExpenseToEdit(expense);
@@ -41,31 +56,24 @@ const ExpensePage = () => {
     fetchExpenseList(); // Refetch the list to reflect changes
   };
 
-  
-  const expenseList = useSelector((state) => state.expense.expenseList);
-  const totalExpense = expenseList.reduce((acc, curr) => acc + +curr.amount, 0);
-
-  
-  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
-
-  
   const handlePremiumActivation = () => {
     dispatch(themeActions.togglePremium());
-    dispatch(themeActions.themeToggle()); 
+    dispatch(themeActions.themeToggle());
   };
-
-  
 
   // Function to download expenses as CSV
   const downloadCSV = () => {
     const csvData = [
       ["ID", "Amount", "Description", "Category"],
-      ...expenseList.map((item) => [item.id, item.amount, item.description, item.category]),
+      ...expenseList.map((item) => [
+        item.id,
+        item.amount,
+        item.description,
+        item.category,
+      ]),
     ];
 
-    const csvContent = csvData
-      .map((row) => row.join(","))
-      .join("\n");
+    const csvContent = csvData.map((row) => row.join(",")).join("\n");
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
@@ -75,16 +83,30 @@ const ExpensePage = () => {
   };
 
   return (
-    <Container fluid className={isDarkMode ? "bg-dark text-white py-4" : "bg-light text-dark py-4"} style={{ minHeight: "100vh" }}>
+    <Container
+      fluid
+      className={
+        isDarkMode ? "bg-dark text-white py-4" : "bg-light text-dark py-4"
+      }
+      style={{ minHeight: "100vh" }}
+    >
       <h2 className="text-center mb-4">Expense Tracker</h2>
-
-      <Row className="justify-content-center">
-        <Col md={8} lg={6}>
-          <Card className="mb-4 shadow-sm">
-            <Card.Body>
-              <ExpenseForm expenseToEdit={expenseToEdit} onEditSuccess={handleEditSuccess} />
-            </Card.Body>
-          </Card>
+      <h5 className="text-center mb-4">
+        Total Expense:{" "}
+        <span className="text-primary">₹{totalExpense.toFixed(2)}</span>
+      </h5>
+      {/* Add Expense Button */}
+      <Row className="justify-content-center mb-3">
+        <Col md="auto">
+          <Button
+            variant="primary"
+            onClick={() => {
+              setExpenseToEdit(null);
+              setShowModal(true);
+            }}
+          >
+            Add Expense
+          </Button>
         </Col>
       </Row>
 
@@ -101,7 +123,11 @@ const ExpensePage = () => {
       {totalExpense > 10000 && (
         <Row className="justify-content-center">
           <Col md="auto">
-            <Button variant="warning" onClick={handlePremiumActivation} className="mb-3">
+            <Button
+              variant="warning"
+              onClick={handlePremiumActivation}
+              className="mb-3"
+            >
               Activate Premium
             </Button>
           </Col>
@@ -115,10 +141,15 @@ const ExpensePage = () => {
           </Button>
         </Col>
       </Row>
-      </Container>
+      {/* Expense Modal */}
+      <ExpenseForm
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        expenseToEdit={expenseToEdit}
+        onEditSuccess={handleEditSuccess}
+      />
+    </Container>
   );
 };
 
 export default ExpensePage;
-
-

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/auth-reducer";
-import { useSelector } from "react-redux";
+//import { useSelector } from "react-redux";
 
 const AuthForm = () => {
   const [email, setEmail] = useState("");
@@ -19,7 +19,7 @@ const AuthForm = () => {
   const navigate = useNavigate(); // Navigation hook
 
   //const { handleLogIn } = useAuth();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  //const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const dispatch = useDispatch();
 

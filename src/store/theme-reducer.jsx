@@ -13,9 +13,13 @@ const themeSlice = createSlice({
     
     togglePremium(state) {
       state.isPremiumActive = !state.isPremiumActive;
-      console.log('Premium Active:', state.isPremiumActive); 
+      state.isDarkMode = state.isPremiumActive;
+       
     },
-    
+    resetTheme(state) {
+      state.isPremiumActive = false;
+      state.isDarkMode = false;
+    },
     themeToggle(state) {
       state.isDarkMode = !state.isDarkMode;
     }

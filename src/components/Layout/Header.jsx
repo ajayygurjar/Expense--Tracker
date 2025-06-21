@@ -1,43 +1,33 @@
-import { Link, NavLink,useNavigate, } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 //import useAuth from "../../store/auth-context";
-import { Container,Nav,Navbar,Button } from "react-bootstrap";
+import { Container, Nav, Navbar, Button } from "react-bootstrap";
 
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/auth-reducer";
 
-const Header=()=>{
+const Header = () => {
+  const navigateTo = useNavigate();
 
-    const navigateTo=useNavigate()
-    
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-    const dispatch=useDispatch();
-    const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn);
-    
-   
+  const logOut = () => {
+    //handleLogOut();
+    localStorage.removeItem("token");
+    dispatch(authActions.handleLogout());
 
+    navigateTo("/", { replace: true });
+  };
 
-    const logOut=()=>{
-        //handleLogOut();
-        localStorage.removeItem('token');
-        dispatch(authActions.handleLogout());
-
-        navigateTo('/',{replace:true});
-    }
-
-
-
-    
-
-
-    return (
-        <header >
+  return (
+    <header>
       <Navbar bg="dark" variant="dark" expand="lg">
         <Container>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand >
             Expense Tracker
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbar-nav" />
-          
+
           <Navbar.Collapse id="navbar-nav">
             <Nav className="me-auto">
               <Nav.Link as={NavLink} to="/home">
@@ -65,12 +55,8 @@ const Header=()=>{
           </Navbar.Collapse>
         </Container>
       </Navbar>
-        
-            
-            
-        </header>
-    );
-
-}
+    </header>
+  );
+};
 
 export default Header;
